@@ -1,10 +1,11 @@
-name: Android CI
+name: Build VicVoix APK
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:  # Manuel run
 
 jobs:
   build:
@@ -19,14 +20,28 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        sdk-version: '34'  # Latest stable
+
+    - name: Accept SDK Licenses
+      run: yes | sdkmanager --licenses
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
     - name: Build with Gradle
       run: ./gradlew build
+      env:
+        TTS_API_KEY: ${{ secrets.TTS_API_KEY }}  # Inject secret
 
     - name: Run tests
       run: ./gradlew test
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: VicVoix-APK
+        path: app/build/outputs/apk/debug/*.apk
+        retention-days: 30
