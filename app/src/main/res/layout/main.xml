@@ -1,18 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VicVoix TTS - Google Cloud"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp" />
+
+        <EditText
+            android:id="@+id/etText"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:hint="Entrez le texte à synthétiser (fr-FR recommandé)"
+            android:inputType="textMultiLine"
+            android:gravity="top|start"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sélectionnez une voix (fr-FR)"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerVoices"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Speaking Rate (Vitesse)"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <SeekBar
+            android:id="@+id/seekRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="375"  <!-- 0.25-4.0 = 0.25 * 1000 = 250 à 4000, mais SeekBar max 1000ish -->
+            android:progress="100"  <!-- Default 1.0 = 100 -->
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/tvRateValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1.0"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pitch (Ton)"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <SeekBar
+            android:id="@+id/seekPitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="400"  <!-- -20 à +20 = 0-400, default 0 = 200 -->
+            android:progress="200"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:id="@+id/tvPitchValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnLoadVoices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Charger les Voix Disponibles"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnGenerate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Générer & Jouer Voix"
+            android:enabled="false" />  <!-- Disabled jusqu'à voix chargée -->
+
+    </LinearLayout>
+
+</ScrollView>
