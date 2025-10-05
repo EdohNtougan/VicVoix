@@ -3,9 +3,6 @@ plugins {
 }
 
 android {
-    buildFeatures {
-        buildConfig true
-    }
     namespace 'com.example.vicvoix'
     compileSdk 34
 
@@ -18,14 +15,18 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        // 🔐 Injection de la clé Google Cloud via environnement (ou fallback par défaut)
         buildConfigField "String", "TTS_API_KEY", "\"${System.getenv('TTS_API_KEY') ?: 'DEFAULT_KEY'}\""
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 
     signingConfigs {
         release {
             if (System.getenv("SIGNING_STORE_FILE") != null) {
-                // ### CORRECTION ICI ###
-                // On dit à Gradle de chercher à la racine du projet (../ signifie "remonter d'un dossier")
+                // ✅ Correction de chemin : fichier keystore à la racine du projet Git
                 storeFile file("../" + System.getenv("SIGNING_STORE_FILE"))
                 storePassword System.getenv("SIGNING_STORE_PASSWORD")
                 keyAlias System.getenv("SIGNING_KEY_ALIAS")
@@ -38,20 +39,38 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            // Pour tester localement sans signer
+            minifyEnabled false
+        }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        resources.excludes += ['META-INF/LICENSE', 'META-INF/NOTICE']
+    }
 }
 
 dependencies {
+    // 🧩 AndroidX et UI
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.activity:activity:1.9.2'
+
+    // 🌐 Réseaux et JSON
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // 🧪 Tests
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
