@@ -18,18 +18,15 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // ### CORRECTION ICI ###
-        // Lit la clé API directement depuis les variables d'environnement (plus fiable)
         buildConfigField "String", "TTS_API_KEY", "\"${System.getenv('TTS_API_KEY') ?: 'DEFAULT_KEY'}\""
     }
 
-    // ### BLOC AJOUTÉ ###
-    // Ce bloc définit comment signer votre application. Il lit les informations
-    // depuis les variables d'environnement que nous allons configurer dans le fichier .yml.
     signingConfigs {
         release {
             if (System.getenv("SIGNING_STORE_FILE") != null) {
-                storeFile file(System.getenv("SIGNING_STORE_FILE"))
+                // ### CORRECTION ICI ###
+                // On dit à Gradle de chercher à la racine du projet (../ signifie "remonter d'un dossier")
+                storeFile file("../" + System.getenv("SIGNING_STORE_FILE"))
                 storePassword System.getenv("SIGNING_STORE_PASSWORD")
                 keyAlias System.getenv("SIGNING_KEY_ALIAS")
                 keyPassword System.getenv("SIGNING_KEY_PASSWORD")
@@ -39,10 +36,7 @@ android {
 
     buildTypes {
         release {
-            // ### LIGNE AJOUTÉE ###
-            // On dit au build de type "release" d'utiliser la configuration de signature ci-dessus.
             signingConfig signingConfigs.release
-
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -57,7 +51,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'  // Latest pour API calls
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
