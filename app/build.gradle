@@ -1,8 +1,12 @@
+
 plugins {
     id 'com.android.application'
 }
 
 android {
+    buildFeatures {
+        buildConfig true
+    }
     namespace 'com.example.vicvoix'
     compileSdk 34
 
