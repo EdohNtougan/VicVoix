@@ -2,7 +2,6 @@ package com.example.vicvoix;
 
 import android.Manifest;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main);  // Fixed: Use main.xml
 
         initViews();
         setupListeners();
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         seekRate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                speakingRate = 0.25f + (progress / 1000f) * 3.75f;  // 0.25 to 4.0
+                speakingRate = 0.25f + (progress / 375f) * 3.75f;  // 0.25 to 4.0
                 tvRateValue.setText(String.format("%.2f", speakingRate));
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
@@ -157,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < voices.length(); i++) {
                         JSONObject voice = voices.getJSONObject(i);
                         String name = voice.getString("name");
-                        if (name.startsWith("fr-FR-")) {  // Filtre fr-FR
+                        if (name.startsWith("fr-FR-")) {
                             voicesList.add(name);
                         }
                     }
@@ -165,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_item, voicesList);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerVoices.setAdapter(adapter);
-                        spinnerVoices.setSelection(0);  // Default
+                        spinnerVoices.setSelection(0);
                         btnGenerate.setEnabled(true);
                         Toast.makeText(MainActivity.this, voicesList.size() + " voix fr-FR chargées !", Toast.LENGTH_SHORT).show();
                         resetLoadButton();
@@ -235,7 +234,6 @@ public class MainActivity extends AppCompatActivity {
     private void saveAndPlayAudio(byte[] audioBytes, String text) {
         new Thread(() -> {
             try {
-                // Sauvegarde via MediaStore pour Downloads (scoped, pas de permission post-Android 10)
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.Audio.Media.DISPLAY_NAME, "VicVoix_" + System.currentTimeMillis() + ".mp3");
                 values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/mpeg");
@@ -293,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
     private void resetGenerateButton() {
         runOnUiThread(() -> {
             btnGenerate.setEnabled(true);
-            btnGenerate.setText("Générer & Jouer Voix");
+            btnGenerate.setText("Générer &amp; Jouer Voix");
         });
     }
 
