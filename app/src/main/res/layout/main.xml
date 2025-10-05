@@ -17,7 +17,7 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- EditText (grand carré) -->
     <EditText
@@ -32,7 +32,7 @@
         android:padding="12dp"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Compteur -->
     <TextView
@@ -43,7 +43,7 @@
         android:textSize="12sp"
         app:layout_constraintTop_toBottomOf="@id/etText"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="6dp"/>
+        android:layout_marginTop="6dp" />
 
     <!-- Voices Spinner -->
     <TextView
@@ -53,7 +53,7 @@
         android:text="Voix"
         app:layout_constraintTop_toBottomOf="@id/etText"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="36dp"/>
+        android:layout_marginTop="36dp" />
 
     <Spinner
         android:id="@+id/spinnerVoices"
@@ -62,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@id/etText"
         app:layout_constraintStart_toEndOf="@id/labelVoices"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="8dp"/>
+        android:layout_marginStart="8dp" />
 
     <!-- Styles Spinner -->
     <TextView
@@ -72,7 +72,7 @@
         android:text="Style"
         app:layout_constraintTop_toBottomOf="@id/spinnerVoices"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="12dp" />
 
     <Spinner
         android:id="@+id/spinnerStyles"
@@ -81,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@id/spinnerVoices"
         app:layout_constraintStart_toEndOf="@id/labelStyles"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="8dp"/>
+        android:layout_marginStart="8dp" />
 
     <!-- Rate -->
     <TextView
@@ -91,7 +91,7 @@
         android:text="Vitesse"
         app:layout_constraintTop_toBottomOf="@id/spinnerStyles"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
     <SeekBar
         android:id="@+id/seekRate"
@@ -102,7 +102,7 @@
         app:layout_constraintStart_toEndOf="@id/labelRate"
         app:layout_constraintEnd_toStartOf="@id/tvRateValue"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"/>
+        android:layout_marginEnd="8dp" />
 
     <TextView
         android:id="@+id/tvRateValue"
@@ -110,7 +110,7 @@
         android:layout_height="wrap_content"
         android:text="1.00"
         app:layout_constraintTop_toBottomOf="@id/spinnerStyles"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Pitch -->
     <TextView
@@ -120,7 +120,7 @@
         android:text="Hauteur"
         app:layout_constraintTop_toBottomOf="@id/seekRate"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="12dp" />
 
     <SeekBar
         android:id="@+id/seekPitch"
@@ -131,69 +131,69 @@
         app:layout_constraintStart_toEndOf="@id/labelPitch"
         app:layout_constraintEnd_toStartOf="@id/tvPitchValue"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"/>
+        android:layout_marginEnd="8dp" />
 
     <TextView
         android:id="@+id/tvPitchValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=\"0.0\"
-        app:layout_constraintTop_toBottomOf=\"@id/seekRate\"
-        app:layout_constraintEnd_toEndOf=\"parent\"/>
+        android:text="0.0"
+        app:layout_constraintTop_toBottomOf="@id/seekRate"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Load / Generate buttons -->
     <Button
-        android:id=\"@+id/btnLoadVoices\"
-        android:layout_width=\"0dp\"
-        android:layout_height=\"wrap_content\"
-        android:text=\"Charger les Voix Disponibles\"
-        app:layout_constraintTop_toBottomOf=\"@id/seekPitch\"
-        app:layout_constraintStart_toStartOf=\"parent\"
-        app:layout_constraintEnd_toStartOf=\"@id/btnGenerate\"
-        android:layout_marginTop=\"16dp\"
-        android:layout_marginEnd=\"8dp\" />
+        android:id="@+id/btnLoadVoices"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Charger les Voix Disponibles"
+        app:layout_constraintTop_toBottomOf="@id/seekPitch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnGenerate"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp" />
 
     <Button
-        android:id=\"@+id/btnGenerate\"
-        android:layout_width=\"wrap_content\"
-        android:layout_height=\"wrap_content\"
-        android:text=\"Générer & Jouer Voix\"
-        app:layout_constraintTop_toBottomOf=\"@id/seekPitch\"
-        app:layout_constraintEnd_toEndOf=\"parent\"
-        android:layout_marginTop=\"16dp\" />
+        android:id="@+id/btnGenerate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Générer &amp; Jouer Voix"
+        app:layout_constraintTop_toBottomOf="@id/seekPitch"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
     <!-- Play & Download icons -->
     <ImageButton
-        android:id=\"@+id/btnPlay\"
-        android:layout_width=\"56dp\"
-        android:layout_height=\"56dp\"
-        android:src=\"@drawable/ic_play\"
-        android:contentDescription=\"Jouer\" 
-        android:background=\"?attr/selectableItemBackgroundBorderless\"
-        app:layout_constraintTop_toBottomOf=\"@id/btnGenerate\"
-        app:layout_constraintStart_toStartOf=\"parent\"
-        android:layout_marginTop=\"18dp\" />
+        android:id="@+id/btnPlay"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/ic_play"
+        android:contentDescription="Jouer"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintTop_toBottomOf="@id/btnGenerate"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="18dp" />
 
     <ImageButton
-        android:id=\"@+id/btnDownload\"
-        android:layout_width=\"56dp\"
-        android:layout_height=\"56dp\"
-        android:src=\"@drawable/ic_download\"
-        android:contentDescription=\"Télécharger\" 
-        android:background=\"?attr/selectableItemBackgroundBorderless\"
-        app:layout_constraintTop_toBottomOf=\"@id/btnGenerate\"
-        app:layout_constraintEnd_toEndOf=\"parent\"
-        android:layout_marginTop=\"18dp\" />
+        android:id="@+id/btnDownload"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/ic_download"
+        android:contentDescription="Télécharger"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintTop_toBottomOf="@id/btnGenerate"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="18dp" />
 
     <!-- Progress -->
     <ProgressBar
-        android:id=\"@+id/progressBar\"
-        android:layout_width=\"wrap_content\"
-        android:layout_height=\"wrap_content\"
-        android:visibility=\"gone\"
-        app:layout_constraintTop_toBottomOf=\"@id/btnPlay\"
-        app:layout_constraintStart_toStartOf=\"parent\"
-        app:layout_constraintEnd_toEndOf=\"parent\"
-        android:layout_marginTop=\"18dp\" />
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/btnPlay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="18dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
