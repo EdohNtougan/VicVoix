@@ -59,20 +59,12 @@ public class MainActivity extends AppCompatActivity {
     private float speakingRate = 1.0f;
     private float pitch = 0.0f;
 
-    private String apiKey;  // Sera set en onCreate
+    private final String apiKey = BuildConfig.TTS_API_KEY;  // From secret
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);  // Fixed: Use main.xml
-
-        // Set API key: Priorité BuildConfig, fallback hardcoded pour tests (remplace par ta vraie)
-        apiKey = BuildConfig.TTS_API_KEY;
-        if (apiKey == null || apiKey.trim().isEmpty()) {
-            apiKey = "AIzaSyD4A5zGVfVxD8VKsPAb7NLiavHW8PhPwHo";  // Colle ta vraie clé du screenshot ici pour test
-            Log.w(TAG, "BuildConfig.TTS_API_KEY vide - utilisation fallback. Configurez gradle pour prod.");
-        }
-        Log.d(TAG, "API Key length: " + apiKey.length());  // Debug: Vérifie si non vide
 
         initViews();
         setupListeners();
@@ -87,11 +79,6 @@ public class MainActivity extends AppCompatActivity {
         tvPitchValue = findViewById(R.id.tvPitchValue);
         btnLoadVoices = findViewById(R.id.btnLoadVoices);
         btnGenerate = findViewById(R.id.btnGenerate);
-
-        // Disable generate si pas de permission initiale
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            btnGenerate.setEnabled(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-        }
     }
 
     private void setupListeners() {
@@ -135,19 +122,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Chargez les voix d'abord !", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (apiKey.isEmpty()) {
-                Toast.makeText(this, "Clé API vide - vérifiez BuildConfig ou fallback !", Toast.LENGTH_LONG).show();
-                return;
-            }
             generateTTS(text);
         });
     }
 
     private void loadVoices() {
-        if (apiKey.isEmpty()) {
-            Toast.makeText(this, "Clé API vide - impossible de charger !", Toast.LENGTH_SHORT).show();
-            return;
-        }
         btnLoadVoices.setEnabled(false);
         btnLoadVoices.setText("Chargement...");
         String url = "https://texttospeech.googleapis.com/v1/voices?languageCode=fr-FR&key=" + apiKey;
@@ -158,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(() -> {
                     Toast.makeText(MainActivity.this, "Erreur réseau pour voix: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    Log.e(TAG, "Load voices failure", e);
                     resetLoadButton();
                 });
             }
@@ -166,14 +144,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erreur API voix: " + response.code() + " - " + response.message(), Toast.LENGTH_LONG).show());
-                    Log.e(TAG, "Load voices HTTP " + response.code());
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erreur API voix: " + response.code(), Toast.LENGTH_LONG).show());
                     resetLoadButton();
                     return;
                 }
                 try {
                     String body = response.body().string();
-                    Log.d(TAG, "Réponse load voices: " + body.substring(0, Math.min(500, body.length())));  // Debug partial JSON
                     JSONObject json = new JSONObject(body);
                     JSONArray voices = json.getJSONArray("voices");
                     voicesList.clear();
@@ -195,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
                     });
                 } catch (Exception e) {
                     runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erreur parsing voix: " + e.getMessage(), Toast.LENGTH_LONG).show());
-                    Log.e(TAG, "Parse voices error", e);
                     resetLoadButton();
                 }
             }
@@ -203,18 +178,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void generateTTS(String text) {
-        // Check et request permission si besoin
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST);
-            return;  // Relancera via onRequestPermissionsResult
-        }
-
         btnGenerate.setEnabled(false);
         btnGenerate.setText("Génération...");
         String url = "https://texttospeech.googleapis.com/v1/text:synthesize?key=" + apiKey;
         try {
-            JSONObject input = new JSONObject().put("text", text.replace("\"", "\\\""));  // Échappement pour guillemets
+            JSONObject input = new JSONObject().put("text", text);
             JSONObject voice = new JSONObject().put("languageCode", "fr-FR").put("name", selectedVoice);
             JSONObject audioConfig = new JSONObject()
                 .put("audioEncoding", "MP3")
@@ -225,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
                 .put("voice", voice)
                 .put("audioConfig", audioConfig);
             String jsonBody = json.toString();
-            Log.d(TAG, "JSON body envoyé: " + jsonBody);  // Debug
 
             RequestBody body = RequestBody.create(jsonBody, MediaType.get("application/json; charset=utf-8"));
             Request request = new Request.Builder().url(url).post(body).build();
@@ -235,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onFailure(Call call, IOException e) {
                     runOnUiThread(() -> {
                         Toast.makeText(MainActivity.this, "Erreur réseau: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        Log.e(TAG, "Generate TTS failure", e);
                         resetGenerateButton();
                     });
                 }
@@ -243,44 +209,25 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (!response.isSuccessful()) {
-                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erreur API: " + response.code() + " - " + response.message(), Toast.LENGTH_LONG).show());
-                        Log.e(TAG, "Generate TTS HTTP " + response.code());
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erreur API: " + response.code(), Toast.LENGTH_LONG).show());
                         resetGenerateButton();
                         return;
                     }
                     try {
                         String bodyStr = response.body().string();
-                        Log.d(TAG, "Réponse generate: audioContent length=" + (bodyStr.contains("audioContent") ? bodyStr.split("\"audioContent\":\"")[1].split("\"")[0].length() : 0));  // Debug size
                         JSONObject jsonResponse = new JSONObject(bodyStr);
                         String audioContent = jsonResponse.getString("audioContent");
                         byte[] audioBytes = Base64.decode(audioContent, Base64.DEFAULT);
-                        Log.d(TAG, "Audio bytes décodés: " + audioBytes.length);
                         saveAndPlayAudio(audioBytes, text);
                     } catch (Exception e) {
-                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erreur réponse/parse: " + e.getMessage(), Toast.LENGTH_LONG).show());
-                        Log.e(TAG, "Response parse error", e);
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erreur réponse: " + e.getMessage(), Toast.LENGTH_LONG).show());
                         resetGenerateButton();
                     }
                 }
             });
         } catch (Exception e) {
             Toast.makeText(this, "Erreur JSON: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            Log.e(TAG, "JSON build error", e);
             resetGenerateButton();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission accordée - relancez Génération !", Toast.LENGTH_SHORT).show();
-                btnGenerate.setEnabled(true);
-            } else {
-                Toast.makeText(this, "Permission refusée - impossible de sauvegarder audio.", Toast.LENGTH_LONG).show();
-                btnGenerate.setEnabled(false);
-            }
         }
     }
 
@@ -294,7 +241,6 @@ public class MainActivity extends AppCompatActivity {
                 values.put(MediaStore.Audio.Media.IS_PENDING, 1);
 
                 Uri uri = getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
-                Log.d(TAG, "Uri insertée: " + uri);
                 if (uri != null) {
                     try (FileOutputStream fos = new FileOutputStream(getContentResolver().openFileDescriptor(uri, "w").getFileDescriptor())) {
                         fos.write(audioBytes);
@@ -307,13 +253,13 @@ public class MainActivity extends AppCompatActivity {
                         playAudio(uri);
                     });
                 } else {
-                    runOnUiThread(() -> Toast.makeText(this, "Erreur uri insert", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(this, "Erreur sauvegarde", Toast.LENGTH_SHORT).show());
                     resetGenerateButton();
                 }
             } catch (Exception e) {
                 Log.e(TAG, "Erreur save/play", e);
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Erreur save/play: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Erreur: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     resetGenerateButton();
                 });
             }
@@ -329,10 +275,8 @@ public class MainActivity extends AppCompatActivity {
                 resetGenerateButton();
             });
             mediaPlayer.start();
-            Log.d(TAG, "Playback started");
         } else {
-            Toast.makeText(this, "Erreur lecture - vérifiez fichier", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "MediaPlayer create failed");
+            Toast.makeText(this, "Erreur lecture", Toast.LENGTH_SHORT).show();
             resetGenerateButton();
         }
     }
@@ -347,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
     private void resetGenerateButton() {
         runOnUiThread(() -> {
             btnGenerate.setEnabled(true);
-            btnGenerate.setText("Générer & Jouer Voix");
+            btnGenerate.setText("Générer &amp; Jouer Voix");
         });
     }
 
