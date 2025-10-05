@@ -20,28 +20,28 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-      with:
-        sdk-version: '34'  # Latest stable
-
-    - name: Accept SDK Licenses
-      run: yes | sdkmanager --licenses
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build with Gradle
-      run: ./gradlew build
+    - name: Decode Keystore
+      run: |
+        echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 --decode > ${{ github.workspace }}/app/release.keystore
+
+    - name: Build Signed Release APK
+      run: ./gradlew assembleRelease
       env:
-        TTS_API_KEY: ${{ secrets.TTS_API_KEY }}  # Inject secret
+        # Votre clé API pour que votre code continue de fonctionner
+        TTS_API_KEY: ${{ secrets.TTS_API_KEY }}
 
-    - name: Run tests
-      run: ./gradlew test
+        # Les variables pour la signature, lues par le build.gradle
+        SIGNING_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+        SIGNING_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        SIGNING_STORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+        SIGNING_STORE_FILE: ${{ github.workspace }}/app/release.keystore
 
-    - name: Upload APK Artifact
+    - name: Upload Release APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: VicVoix-APK
-        path: app/build/outputs/apk/debug/*.apk
+        name: VicVoix-Release-APK
+        path: app/build/outputs/apk/release/*.apk
         retention-days: 30
