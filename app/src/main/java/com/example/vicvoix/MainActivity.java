@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         // Set API key: Priorité BuildConfig, fallback hardcoded pour tests (remplace par ta vraie)
         apiKey = BuildConfig.TTS_API_KEY;
         if (apiKey == null || apiKey.trim().isEmpty()) {
-            apiKey = "AIzaSy...TA_CLE_API_ICI...";  // Colle ta vraie clé du screenshot ici pour test
+            apiKey = "AIzaSyD4A5zGVfVxD8VKsPAb7NLiavHW8PhPwHo";  // Colle ta vraie clé du screenshot ici pour test
             Log.w(TAG, "BuildConfig.TTS_API_KEY vide - utilisation fallback. Configurez gradle pour prod.");
         }
         Log.d(TAG, "API Key length: " + apiKey.length());  // Debug: Vérifie si non vide
