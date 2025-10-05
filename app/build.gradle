@@ -1,4 +1,3 @@
-
 plugins {
     id 'com.android.application'
 }
@@ -19,12 +18,31 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // Inject API key from GH secret
-        buildConfigField "String", "TTS_API_KEY", "\"${project.findProperty('TTS_API_KEY') ?: 'DEFAULT_KEY'}\""
+        // ### CORRECTION ICI ###
+        // Lit la clé API directement depuis les variables d'environnement (plus fiable)
+        buildConfigField "String", "TTS_API_KEY", "\"${System.getenv('TTS_API_KEY') ?: 'DEFAULT_KEY'}\""
+    }
+
+    // ### BLOC AJOUTÉ ###
+    // Ce bloc définit comment signer votre application. Il lit les informations
+    // depuis les variables d'environnement que nous allons configurer dans le fichier .yml.
+    signingConfigs {
+        release {
+            if (System.getenv("SIGNING_STORE_FILE") != null) {
+                storeFile file(System.getenv("SIGNING_STORE_FILE"))
+                storePassword System.getenv("SIGNING_STORE_PASSWORD")
+                keyAlias System.getenv("SIGNING_KEY_ALIAS")
+                keyPassword System.getenv("SIGNING_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
         release {
+            // ### LIGNE AJOUTÉE ###
+            // On dit au build de type "release" d'utiliser la configuration de signature ci-dessus.
+            signingConfig signingConfigs.release
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
