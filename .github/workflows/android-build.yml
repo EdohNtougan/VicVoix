@@ -1,4 +1,4 @@
-name: Build Vicvoix APK
+name: Build VicVoix APK
 
 on:
   push:
@@ -10,18 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: 🧾 Checkout du code source
+      uses: actions/checkout@v4
 
-    - name: Set up JDK 17
+    - name: ☕ Configurer JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Grant execute permission for gradlew
+    - name: 🔧 Donner les permissions à gradlew
       run: chmod +x gradlew
-      
-    - name: Build Signed Release APK
+
+    - name: 🧱 Synchroniser les dépendances
+      run: ./gradlew dependencies
+
+    - name: 🚀 Construire l’APK Release signé
       run: ./gradlew assembleRelease
       env:
         TTS_API_KEY: ${{ secrets.TTS_API_KEY }}
@@ -30,9 +34,24 @@ jobs:
         SIGNING_STORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
         SIGNING_STORE_FILE: "vicvoix-release-key.keystore"
 
-    - name: Upload Release APK Artifact
+    - name: 🗂️ Renommer l’APK avec date et version
+      run: |
+        VERSION_NAME=$(grep versionName app/build.gradle | head -1 | awk '{print $2}' | tr -d '"')
+        DATE=$(date +'%Y%m%d')
+        mkdir -p release/
+        cp app/build/outputs/apk/release/*.apk release/VicVoix-v${VERSION_NAME}-${DATE}.apk
+
+    - name: 📤 Upload Release APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: VicVoix-Release-APK
-        path: app/build/outputs/apk/release/*.apk
+        path: release/*.apk
+        retention-days: 30
+
+    - name: 📦 (Optionnel) Upload mapping.txt si activé
+      if: success() && exists('app/build/outputs/mapping/release/mapping.txt')
+      uses: actions/upload-artifact@v4
+      with:
+        name: VicVoix-Mapping
+        path: app/build/outputs/mapping/release/mapping.txt
         retention-days: 30
