@@ -141,11 +141,13 @@ public class MainActivity extends AppCompatActivity {
                             } finally {
                                 lastAudioBytes = null;
                                 resetGenerateButton();
+                                setUiBusy(false); // Ajout pour cacher le spinner après save
                             }
                         }
                     } else {
                         // L'utilisateur a annulé
                         resetGenerateButton();
+                        setUiBusy(false); // Ajout pour cacher le spinner si annulé
                     }
                 }
         );
@@ -249,11 +251,13 @@ public class MainActivity extends AppCompatActivity {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             btnPlay.setImageResource(R.drawable.ic_play);
+            handler.removeCallbacks(updateProgress); // Stop updating on pause
         } else {
             mediaPlayer.start();
             btnPlay.setImageResource(R.drawable.ic_pause);
             handler.post(updateProgress); // Start updating progress
         }
+        setUiBusy(false); // Ajout pour cacher le spinner sur play/pause
     }
 
     private void requestPermissionsIfNeeded() {
@@ -378,8 +382,9 @@ public class MainActivity extends AppCompatActivity {
                             runOnUiThread(() -> {
                                 playFromBytes(audioBytes);
                                 resetGenerateButton();
-                                setUiBusy(false);
+                                // Déplacé setUiBusy(false) après playFromBytes pour s'assurer qu'il disparaisse une fois l'audio prêt
                             });
+                            setUiBusy(false); // Appel immédiat pour cacher pendant la préparation async
                         }
 
                     } catch (Exception e) {
@@ -420,17 +425,20 @@ public class MainActivity extends AppCompatActivity {
                 mp.start();
                 btnPlay.setImageResource(R.drawable.ic_pause);
                 handler.post(updateProgress); // Start progress update
+                setUiBusy(false); // Ajout pour cacher le spinner une fois prêt à jouer
             });
 
             mediaPlayer.setOnCompletionListener(mp -> {
                 btnPlay.setImageResource(R.drawable.ic_play);
                 audioProgress.setProgress(0);
                 handler.removeCallbacks(updateProgress);
+                setUiBusy(false); // Ajout pour cacher à la fin
             });
 
         } catch (IOException e) {
             Toast.makeText(this, "Erreur lecture: " + e.getMessage(), Toast.LENGTH_LONG).show();
             Log.e(TAG, "playFromBytes", e);
+            setUiBusy(false); // Ajout en cas d'erreur
         }
     }
 
@@ -461,6 +469,7 @@ public class MainActivity extends AppCompatActivity {
         }
         btnPlay.setImageResource(R.drawable.ic_play);
         audioProgress.setProgress(0);
+        setUiBusy(false); // Ajout pour cacher le spinner sur release
     }
 
     private void setUiBusy(boolean busy) {
