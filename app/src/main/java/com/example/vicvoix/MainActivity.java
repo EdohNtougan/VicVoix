@@ -429,7 +429,7 @@ private void resetLoadButton() {
     runOnUiThread(() -> {
         if (btnLoadVoices != null) {
             btnLoadVoices.setEnabled(true);
-            btnLoadVoices.setText("Charger les Voix Disponibles");
+            btnLoadVoices.setText("Voix Chargées");
         }
     });
 }
@@ -438,7 +438,7 @@ private void resetGenerateButton() {
     runOnUiThread(() -> {
         if (btnGenerate != null) {
             btnGenerate.setEnabled(true);
-            btnGenerate.setText("Générer & Jouer Voix");
+            btnGenerate.setText("Générer");
         }
     });
 }
