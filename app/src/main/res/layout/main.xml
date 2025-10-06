@@ -29,7 +29,7 @@
         android:layout_height="200dp"
         android:gravity="top|start"
         android:inputType="textMultiLine|textCapSentences"
-        android:hint="Écris ton texte ici (max 5000 caractères)"
+        android:hint="Écris ton texte ici (max 3000 caractères)"
         android:background="@drawable/bg_edittext"
         android:textColor="@color/edit_text_color"
         android:textColorHint="#999999"
@@ -45,7 +45,7 @@
         android:id="@+id/tvCharCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0 / 5000"
+        android:text="0 / 3000"
         android:textSize="12sp"
         android:textColor="#AAAAAA"
         app:layout_constraintTop_toBottomOf="@id/etText"
@@ -72,90 +72,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="8dp" />
 
-    <!-- Styles -->
-    <TextView
-        android:id="@+id/labelStyles"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Style"
-        android:textColor="@color/button_text"
-        app:layout_constraintTop_toBottomOf="@id/spinnerVoices"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="12dp" />
-
-    <Spinner
-        android:id="@+id/spinnerStyles"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/spinnerVoices"
-        app:layout_constraintStart_toEndOf="@id/labelStyles"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="8dp" />
-
-    <!-- Rate -->
-    <TextView
-        android:id="@+id/labelRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Vitesse"
-        android:textColor="@color/button_text"
-        app:layout_constraintTop_toBottomOf="@id/spinnerStyles"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp" />
-
-    <SeekBar
-        android:id="@+id/seekRate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="375"
-        android:progressTint="@color/accent"
-        app:layout_constraintTop_toBottomOf="@id/spinnerStyles"
-        app:layout_constraintStart_toEndOf="@id/labelRate"
-        app:layout_constraintEnd_toStartOf="@id/tvRateValue"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
-
-    <TextView
-        android:id="@+id/tvRateValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1.00"
-        android:textColor="@color/button_text"
-        app:layout_constraintTop_toBottomOf="@id/spinnerStyles"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Pitch -->
-    <TextView
-        android:id="@+id/labelPitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hauteur"
-        android:textColor="@color/button_text"
-        app:layout_constraintTop_toBottomOf="@id/seekRate"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="12dp" />
-
-    <SeekBar
-        android:id="@+id/seekPitch"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="40"
-        android:progressTint="@color/accent"
-        app:layout_constraintTop_toBottomOf="@id/seekRate"
-        app:layout_constraintStart_toEndOf="@id/labelPitch"
-        app:layout_constraintEnd_toStartOf="@id/tvPitchValue"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
-
-    <TextView
-        android:id="@+id/tvPitchValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.0"
-        android:textColor="@color/button_text"
-        app:layout_constraintTop_toBottomOf="@id/seekRate"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <!-- Buttons -->
     <Button
         android:id="@+id/btnLoadVoices"
@@ -164,7 +80,7 @@
         android:background="@drawable/bg_button_outline"
         android:text="Charger"
         android:textColor="@color/button_text"
-        app:layout_constraintTop_toBottomOf="@id/seekPitch"
+        app:layout_constraintTop_toBottomOf="@id/spinnerVoices"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnGenerate"
         android:layout_marginTop="18dp"
@@ -178,7 +94,7 @@
         android:background="@drawable/bg_button_primary"
         android:text="Générer"
         android:textColor="@color/button_text"
-        app:layout_constraintTop_toBottomOf="@id/seekPitch"
+        app:layout_constraintTop_toBottomOf="@id/spinnerVoices"
         app:layout_constraintStart_toEndOf="@id/btnLoadVoices"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="18dp" />
@@ -211,6 +127,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="30dp" />
 
+    <!-- Audio Progress SeekBar -->
+    <SeekBar
+        android:id="@+id/audioProgress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:progressTint="@color/accent"
+        android:thumbTint="@color/accent"
+        app:layout_constraintTop_toBottomOf="@id/btnPlay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp" />
+
     <!-- Progress -->
     <ProgressBar
         android:id="@+id/progressBar"
@@ -219,7 +147,7 @@
         android:indeterminate="true"
         android:indeterminateTint="@color/accent"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/btnPlay"
+        app:layout_constraintTop_toBottomOf="@id/audioProgress"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp" />
