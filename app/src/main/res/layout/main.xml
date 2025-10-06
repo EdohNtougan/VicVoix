@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/background">
 
     <!-- Title -->
     <TextView
@@ -14,7 +15,7 @@
         android:text="VicVoix"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginBottom="8dp"
+        android:textColor="@color/button_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -27,9 +28,11 @@
         android:gravity="top|start"
         android:inputType="textMultiLine|textCapSentences"
         android:hint="Écris ton texte ici (max 5000 caractères)"
-        android:background="@android:drawable/edit_text"
-        android:maxLength="5000"
+        android:background="@drawable/bg_edittext"
+        android:textColor="@color/edit_text_color"
+        android:hintTextColor="#99FFFFFF"
         android:padding="12dp"
+        android:scrollbars="vertical"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -41,19 +44,21 @@
         android:layout_height="wrap_content"
         android:text="0 / 5000"
         android:textSize="12sp"
+        android:textColor="#BBBBBB"
         app:layout_constraintTop_toBottomOf="@id/etText"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="6dp" />
 
-    <!-- Voices Spinner -->
+    <!-- Voices Spinner (ligne) -->
     <TextView
         android:id="@+id/labelVoices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Voix"
+        android:textColor="@color/button_text"
         app:layout_constraintTop_toBottomOf="@id/etText"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="36dp" />
+        android:layout_marginTop="18dp" />
 
     <Spinner
         android:id="@+id/spinnerVoices"
@@ -64,12 +69,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="8dp" />
 
-    <!-- Styles Spinner -->
+    <!-- Styles Spinner (ligne) -->
     <TextView
         android:id="@+id/labelStyles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Style"
+        android:textColor="@color/button_text"
         app:layout_constraintTop_toBottomOf="@id/spinnerVoices"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="12dp" />
@@ -89,6 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Vitesse"
+        android:textColor="@color/button_text"
         app:layout_constraintTop_toBottomOf="@id/spinnerStyles"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp" />
@@ -98,6 +105,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:max="375"
+        android:progressTint="@color/accent"
         app:layout_constraintTop_toBottomOf="@id/spinnerStyles"
         app:layout_constraintStart_toEndOf="@id/labelRate"
         app:layout_constraintEnd_toStartOf="@id/tvRateValue"
@@ -109,6 +117,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1.00"
+        android:textColor="@color/button_text"
         app:layout_constraintTop_toBottomOf="@id/spinnerStyles"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -118,6 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hauteur"
+        android:textColor="@color/button_text"
         app:layout_constraintTop_toBottomOf="@id/seekRate"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="12dp" />
@@ -127,6 +137,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:max="40"
+        android:progressTint="@color/accent"
         app:layout_constraintTop_toBottomOf="@id/seekRate"
         app:layout_constraintStart_toEndOf="@id/labelPitch"
         app:layout_constraintEnd_toStartOf="@id/tvPitchValue"
@@ -138,62 +149,78 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0.0"
+        android:textColor="@color/button_text"
         app:layout_constraintTop_toBottomOf="@id/seekRate"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Load / Generate buttons -->
+    <!-- Load / Generate buttons (chaîne horizontale) -->
     <Button
         android:id="@+id/btnLoadVoices"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_button_outline"
         android:text="Charger les Voix Disponibles"
+        android:textColor="#BDBDBD"
+        android:padding="12dp"
         app:layout_constraintTop_toBottomOf="@id/seekPitch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnGenerate"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintHorizontal_chainStyle="spread" />
 
     <Button
         android:id="@+id/btnGenerate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_button_primary"
         android:text="Générer &amp; Jouer Voix"
+        android:textColor="@color/button_text"
+        android:padding="12dp"
         app:layout_constraintTop_toBottomOf="@id/seekPitch"
+        app:layout_constraintStart_toEndOf="@id/btnLoadVoices"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="18dp" />
 
-    <!-- Play & Download icons -->
+    <!-- Play & Download icons : chain horizontale, position plus basse -->
     <ImageButton
         android:id="@+id/btnPlay"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:src="@drawable/ic_play"
         android:contentDescription="Jouer"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:background="@android:color/transparent"
+        android:tint="@color/accent"
         app:layout_constraintTop_toBottomOf="@id/btnGenerate"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="18dp" />
+        app:layout_constraintEnd_toStartOf="@id/btnDownload"
+        android:layout_marginTop="28dp"
+        app:layout_constraintHorizontal_chainStyle="packed" />
 
     <ImageButton
         android:id="@+id/btnDownload"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:src="@drawable/ic_download"
         android:contentDescription="Télécharger"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:background="@android:color/transparent"
+        android:tint="@color/accent"
         app:layout_constraintTop_toBottomOf="@id/btnGenerate"
+        app:layout_constraintStart_toEndOf="@id/btnPlay"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
+        android:layout_marginTop="28dp" />
 
-    <!-- Progress -->
+    <!-- Progress (centered below icons) -->
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/accent"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/btnPlay"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp" />
+        android:layout_marginTop="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
