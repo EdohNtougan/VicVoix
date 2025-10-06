@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- Couleurs principales -->
-    <color name="purple_200">#BB86FC</color>
+    <color name="primary">#7C4DFF</color> <!-- Violet doux -->
+    <color name="primary_dark">#651FFF</color>
+    <color name="accent">#00E5FF</color> <!-- Cyan lumineux -->
+    <color name="background">#121212</color> <!-- Fond sombre -->
+    <color name="surface">#1E1E1E</color>
+
+    <!-- Couleurs du texte -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0B0B0</color>
+    <color name="button_text">#FFFFFF</color>
+    <color name="edit_text_color">#000000</color>
+
+    <!-- Champs de saisie -->
+    <color name="edit_text_bg">#FFFFFF</color>
+    <color name="edit_text_border">#FF9800</color>
+
+    <!-- Boutons -->
+    <color name="button_outline">#00E5FF</color>
+    <color name="button_outline_pressed">#00B8D4</color>
+    <color name="button_primary_bg">#7C4DFF</color>
+
+    <!-- Divers -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="gray">#9E9E9E</color>
+    <color name="light_gray">#E0E0E0</color>
+    <color name="dark_gray">#212121</color>
+    <color name="teal_200">#03DAC5</color>
     <color name="purple_500">#6200EE</color>
     <color name="purple_700">#3700B3</color>
-    <color name="teal_200">#03DAC5</color>
-    <color name="teal_700">#018786</color>
+    <color name="purple_200">#BB86FC</color>
 
-    <!-- Couleurs du texte et du fond -->
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
-    <color name="dark_background">#121212</color>
-    <color name="light_gray">#E0E0E0</color>
-
-    <!-- Accent moderne pour les boutons/icônes -->
-    <color name="accent">#00BCD4</color>
-    <color name="highlight">#FF4081</color>
 </resources>
