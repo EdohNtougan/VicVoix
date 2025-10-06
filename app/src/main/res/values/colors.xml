@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#7A00FF</color>     <!-- violet bouton -->
-    <color name="accent">#00C7B7</color>      <!-- teal accent pour icônes et spinner -->
-    <color name="background">#161316</color>  <!-- fond sombre -->
-    <color name="surface">#1F1B1F</color>
-    <color name="edit_text_bg">#FFFFFF</color>
-    <color name="edit_text_border">#E6E6E6</color>
-    <color name="edit_text_color">#000000</color>
-    <color name="button_text">#FFFFFF</color>
-    <color name="button_outline">#2E2A2E</color>
+    <!-- Couleurs principales -->
+    <color name="purple_200">#BB86FC</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="teal_200">#03DAC5</color>
+    <color name="teal_700">#018786</color>
+
+    <!-- Couleurs du texte et du fond -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="dark_background">#121212</color>
+    <color name="light_gray">#E0E0E0</color>
+
+    <!-- Accent moderne pour les boutons/icônes -->
+    <color name="accent">#00BCD4</color>
+    <color name="highlight">#FF4081</color>
 </resources>
